@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 
+import { Cars } from "../protocols/cars.js";
 import carService from "../services/carService.js";
 import httpStatus from "http-status";
 
@@ -57,11 +58,26 @@ async function deleteCar(req: Request, res: Response) {
   }
 }
 
+async function updateCar(req: Request, res: Response) {
+  const carId = parseInt(req.params.carId);
+  const { model, licensePlate, year, color } = req.body;
+  const newCarData: Partial<Cars> = { model, licensePlate, year, color };
+
+  try {
+    await carService.updateCar(carId, newCarData);
+    res.send(httpStatus.ok);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 const carController = {
   getAllCars,
   getSpecificCar,
   createCar,
   deleteCar,
+  updateCar,
 };
 
 export default carController;

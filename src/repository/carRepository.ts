@@ -30,12 +30,25 @@ async function deleteCar(id: number): Promise<Cars> {
   });
 }
 
+async function updateCar(id: number, newData: Partial<Cars>) {
+  return prisma.cars.update({
+    where: { id },
+    data: {
+      model: newData.model,
+      licensePlate: newData.licensePlate,
+      year: newData.year,
+      color: newData.color,
+    },
+  });
+}
+
 const carRepository = {
   getCar,
   getCarWithLicensePlate,
   getCars,
   createCar,
   deleteCar,
+  updateCar,
 };
 
 export default carRepository;
